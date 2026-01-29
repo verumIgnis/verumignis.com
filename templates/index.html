@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>verumIgnis.com</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div style="text-align: center;">
+        <div id="header-content">
+            <div id="header-logo">
+                <img id="header-img" src="/icon.png" alt="verumIgnis icon">
+            </div>
+            <p>verumIgnis' website</p>
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <div id="main-content">
+            {% for x in content %}
+            <div class="content-element">
+                <a href="{{ x['url'] }}">
+                    <img class="thumbnail" src="{{ x['thumbnail'] }}" alt="{{ x['title'] }}">
+                    <h3>{{ x['title'] }}</h3>
+                </a>
+            </div>
+            {% else %}
+            No content found
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

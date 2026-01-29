@@ -1,0 +1,20 @@
+[
+    {
+        "title": "Repairing a Tektronix 465 oscilloscope",
+        "thumbnail": "/oscilloscope-thumbnail.png",
+        "content": "oscilloscope.md",
+        "url": "/post/0"
+    },
+    {
+        "title": "Building a cheap high quality microphone",
+        "thumbnail": "/mic-thumbnail.png",
+        "content": "mic.md",
+        "url": "/post/1"
+    },
+    {
+        "title": "Making a bus map of the UK",
+        "thumbnail": "/busmap-thumbnail.png",
+        "content": "busmap.md",
+        "url": "/post/2"
+    }
+]

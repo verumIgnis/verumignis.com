@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TNAK Editor - verumIgnis.com</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div style="text-align: center;">
+        <div id="post-title">
+            <h1>Totally Not A Keyboard - Payload Editor</h1>
+        </div>
+    </div>
+    <div id="tnak-content">
+
+        <div class="tnak-left-panel">
+            <div class="tnak-button-container">
+                <button id="connect">Connect</button>
+                <button id="read">Read</button>
+                <button id="write">Write</button>
+            </div>
+
+            <div class="tnak-status">TNAK not connected.</div>
+
+            <textarea id="script">
+REM Default TNAK Script
+SPEED 2
+STRING https://verumignis.com/tnak
+ENTER
+</textarea>
+        </div>
+
+        <div class="tnak-right-panel">
+            {{ content|markdown }}
+        </div>
+
+    </div>
+    <div id="back-btn">
+        <a href="/">
+            <img id="header-img" src="/icon.png" alt="verumIgnis icon">
+        </a>
+    </div>
+    <p><br></p>
+
+    <script src="/static/tnak.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>verumIgnis.com</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div style="text-align: center;">
+        <div id="post-title">
+            <h1>{{ title }}</h1>
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <div id="post-content">
+            {{ content|markdown }}
+        </div>
+    </div>
+    <div id="back-btn">
+        <a href="/">
+            <img id="header-img" src="/icon.png" alt="verumIgnis icon">
+        </a>
+    </div>
+    <p><br></p>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Totally Not A Keyboard</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 2em auto; }
+    textarea { width: 100%; height: 320px; font-family: monospace; }
+    button { margin-right: 1em; }
+  </style>
+</head>
+<body>
+
+<h1>Totally Not A Keyboard</h1>
+
+<button id="connect">Connect</button>
+<button id="read">Read</button>
+<button id="write">Write</button>
+
+<textarea id="script">
+REM Default TNAK Script
+SPEED 2
+STRING https://verumignis.com/tnak
+ENTER
+</textarea>
+
+<script src="/static/tnak.js"></script>
+
+</body>
+</html>

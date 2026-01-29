@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>verumIgnis.com | Full UK Bus Map</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #openseadragon {
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="openseadragon"></div>
+    <script>
+        var viewer = OpenSeadragon({
+            id: "openseadragon",
+            prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
+            tileSources: "{{ dziURL }}",
+            minPixelRatio: 1.0,
+
+            animationTime: 0.05,
+            springStiffness: 100,
+
+            zoomPerClick: 2.0,
+            zoomPerScroll: 1.5,
+            zoomPerSecond: 3.0,
+
+            gestureSettingsTouch: {
+                flickEnabled: true,
+                flickMinSpeed: 20,
+                flickMomentum: 0.25
+            },
+
+            maxZoomPixelRatio: 5
+        });
+        viewer.addHandler('open',()=> viewer.world.getItemAt(0).source.hasTransparency = ()=>false ) // janky fix to prevent lines between tiles
+    </script>
+</body>
+</html>
