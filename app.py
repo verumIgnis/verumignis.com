@@ -48,10 +48,6 @@ def tnak():
         tnakDocs = file.read()
     return render_template("tnak.html", content=tnakDocs) # Totally Not A Keyboard
 
-@app.route("/tnak-test")
-def tnaktest():
-    return render_template("tnak-test.html") # Totally Not A Keyboard
-
 
 @app.route('/<path:filename>')
 def serve(filename):

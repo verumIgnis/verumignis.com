@@ -15,20 +15,31 @@
     <div id="tnak-content">
 
         <div class="tnak-left-panel">
-            <div class="tnak-button-container">
-                <button id="connect">Connect</button>
-                <button id="read">Read</button>
-                <button id="write">Write</button>
-            </div>
 
-            <div class="tnak-status">TNAK not connected.</div>
+            <div class="tnak-status">
+                <span class="status-text">Ready.</span>
+                <div class="progress-bar"></div>
+            </div>
 
             <textarea id="script">
 REM Default TNAK Script
-SPEED 2
-STRING https://verumignis.com/tnak
+SPEED 20
+STRING To connect your TNAK:
 ENTER
+ENTER
+STRING 1. Short PROG to 3.3V with any conductive material
+ENTER
+STRING 2. Connect the device to your computer
+ENTER
+STRING 3. Click "Write Script To TNAK" and select "STM32 BOOTLOADER" from the list
+ENTER
+ENTER
+STRING DM verumIgnis on Discord for tech support.
 </textarea>
+
+            <div class="tnak-button-container">
+                <button id="write">Write Script To TNAK</button>
+            </div>
         </div>
 
         <div class="tnak-right-panel">
@@ -43,6 +54,8 @@ ENTER
     </div>
     <p><br></p>
 
-    <script src="/static/tnak.js"></script>
+
+    <script src="/usbDfuDevice.js"></script>
+    <script src="/tnak.js"></script>
 </body>
 </html>

@@ -38,45 +38,32 @@ GUI r
 REM Wait for 0.5s
 DELAY 500
 STRING calculator.exe
+ENTER
 ```
 
-TODO: Finish this
+---
 
-TODO: Finish this
+### SPEED
+The amount of time between each keypress in miliseconds.
 
-TODO: Finish this
+Example:
+```
+SPEED 1
+STRING This is typed very fast!
+SPEED 500
+STRING And this is typed very slow...
+```
 
-TODO: Finish this
+---
 
-TODO: Finish this
+### HOLD & RELEASE
+TNAK will HOLD the specified key down until RELEASEd.
 
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
-TODO: Finish this
-
+Example:
+```
+HOLD CTRL
+STRING c
+DELAY 1000
+STRING v
+RELEASE CTRL
+```
