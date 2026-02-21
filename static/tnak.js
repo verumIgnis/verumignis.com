@@ -21,20 +21,12 @@ const keyMap = {
   'CTRL':0xE0,'CONTROL':0xE0,'SHIFT':0xE1,'ALT':0xE2,'GUI':0xE3,'WINDOWS':0xE3
 };
 
-const shiftMap = {
-  '!':['1'], '@':['2'], '#':['3'], '$':['4'], '%':['5'],
-  '^':['6'], '&':['7'], '*':['8'], '(':['9'], ')':['0'],
-  '_':['-'], '+':['='], '{':['['], '}':[']'],
-  '|':['\\'], ':':[';'], '"':['\''],
-  '~':['`'], '<':[','], '>':['.'], '?':['/']
+const modifierMap = {
+  'CTRL':  0x01,
+  'SHIFT': 0x02,
+  'ALT':   0x04,
+  'GUI':   0x08
 };
-
-// Reverse map for decoding SHIFT characters
-const shiftMapInverse = {};
-for (const [shifted, baseArr] of Object.entries(shiftMap)) {
-  shiftMapInverse[baseArr[0]] = shifted;
-}
-
 
 const writeButton = document.getElementById('write');
 const statusEl = document.querySelector('.tnak-status .status-text');
@@ -114,6 +106,16 @@ function dfuDisconnectHandler() {
 function encode(scriptText) {
   const out = [];
   const lines = scriptText.split('\n');
+  const heldKeys = new Set();
+  let heldModifier = 0;
+
+  function emitHold() {
+    const keys = Array.from(heldKeys);
+    if (keys.length > 5) throw new Error('Too many keys held at once (max 5)');
+    const buffer = [0x03, heldModifier, 0, 0, 0, 0, 0];
+    keys.forEach((k, i) => buffer[i + 2] = k);
+    out.push(...buffer);
+  }
 
   for (let lineNum = 0; lineNum < lines.length; lineNum++) {
     let l = lines[lineNum].trim();
@@ -124,37 +126,53 @@ function encode(scriptText) {
 
     switch (cmd) {
       case 'SPEED': {
-        const v = parseInt(parts[1]);
-        if (isNaN(v) || v < 0 || v > 255)
+        const v = parseInt(parts[1], 10);
+        if (isNaN(v) || v < 0 || v > 65535)
           throw new Error(`Line ${lineNum + 1}: Invalid SPEED value`);
-        out.push(0x01, v);
+        out.push(0x01, v & 0xFF, (v >> 8) & 0xFF);
         break;
       }
 
       case 'DELAY': {
-        const v = parseInt(parts[1]);
-        if (isNaN(v) || v < 0 || v > 255)
+        const v = parseInt(parts[1], 10);
+        if (isNaN(v) || v < 0 || v > 65535)
           throw new Error(`Line ${lineNum + 1}: Invalid DELAY value`);
-        out.push(0x02, v);
+        out.push(0x02, v & 0xFF, (v >> 8) & 0xFF);
         break;
       }
 
       case 'HOLD': {
-        const key = keyMap[parts[1].toUpperCase()];
+        const keyName = parts[1].toUpperCase();
+        const key = keyMap[keyName];
         if (key === undefined) throw new Error(`Line ${lineNum + 1}: Unknown key '${parts[1]}'`);
-        out.push(0x03, key);
+
+        if (modifierMap[keyName]) {
+          heldModifier |= modifierMap[keyName];
+        } else {
+          heldKeys.add(key);
+        }
+
+        emitHold();
         break;
       }
 
       case 'RELEASE': {
-        const key = keyMap[parts[1].toUpperCase()];
+        const keyName = parts[1].toUpperCase();
+        const key = keyMap[keyName];
         if (key === undefined) throw new Error(`Line ${lineNum + 1}: Unknown key '${parts[1]}'`);
-        out.push(0x04, key);
+
+        if (modifierMap[keyName]) {
+          heldModifier &= ~modifierMap[keyName];
+        } else {
+          heldKeys.delete(key);
+        }
+
+        emitHold();
         break;
       }
 
       case 'STRING': {
-        const text = l.slice(7); // after "STRING "
+        const text = l.slice(7);
         if (text.length > 255)
           throw new Error(`Line ${lineNum + 1}: STRING too long (max 255)`);
         out.push(0x05, text.length);
@@ -163,27 +181,21 @@ function encode(scriptText) {
       }
 
       default: {
-        // Treat unknown commands as single keypresses like ENTER, TAB, ESC, etc.
-        const key = keyMap[cmd];
+        const keyName = cmd;
+        const key = keyMap[keyName];
+
         if (key === undefined) throw new Error(`Line ${lineNum + 1}: Unknown command or key '${cmd}'`);
-        out.push(0x06, key); // single keypress command
+
+        if (modifierMap[keyName]) {
+          // SINGLE MODIFIER: send as one-shot without altering heldModifier
+          out.push(0x04, heldModifier | modifierMap[keyName]);
+        } else {
+          out.push(0x06, key);
+        }
         break;
       }
     }
   }
 
   return new Uint8Array(out);
-}
-
-
-
-function keyByCode(code) {
-  for (const [k, v] of Object.entries(keyMap)) {
-    if (v === code && k.length === 1) return k;
-  }
-  return null;
-}
-
-function name(code) {
-  return Object.keys(keyMap).find(k => keyMap[k] === code) || 'UNKNOWN';
 }
