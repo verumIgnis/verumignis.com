@@ -25,7 +25,8 @@ const modifierMap = {
   'CTRL':  0x01,
   'SHIFT': 0x02,
   'ALT':   0x04,
-  'GUI':   0x08
+  'GUI':   0x08,
+  'WINDOWS':0x08 // WINDOWS is also valid for GUI
 };
 
 const writeButton = document.getElementById('write');
@@ -44,7 +45,7 @@ document.getElementById('write').onclick = async () => {
   let scriptData;
   try {
     const scriptText = document.getElementById('script').value;
-    scriptData = encode(scriptText); // your encode() function should return Uint8Array
+    scriptData = encode(scriptText);
   } catch (err) {
     setStatus(`Invalid syntax: ${err.message}`);
     writeButton.disabled = false;
@@ -187,10 +188,9 @@ function encode(scriptText) {
         if (key === undefined) throw new Error(`Line ${lineNum + 1}: Unknown command or key '${cmd}'`);
 
         if (modifierMap[keyName]) {
-          // SINGLE MODIFIER: send as one-shot without altering heldModifier
-          out.push(0x04, heldModifier | modifierMap[keyName]);
+          out.push(0x04, heldModifier | modifierMap[keyName]); // SINGLE MODIFIER
         } else {
-          out.push(0x06, key);
+          out.push(0x06, key); // SINGLE KEY
         }
         break;
       }
