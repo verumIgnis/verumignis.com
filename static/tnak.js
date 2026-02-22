@@ -38,9 +38,13 @@ function setStatus(message) {
 }
 
 document.getElementById('write').onclick = async () => {
-  writeButton.disabled = true;
 
-  setStatus(`Downloading Firmware Image`);
+  if (!('usb' in navigator)) {
+    setStatus(`Your browser does not support WebUSB. Please use a Chroumium based browser instead.`);
+    return
+  }
+
+  writeButton.disabled = true;
 
   let scriptData;
   try {
@@ -61,6 +65,8 @@ document.getElementById('write').onclick = async () => {
   }
 
   try {
+    setStatus(`Downloading Firmware Image`);
+
     // Fetch TNAK.bin
     const response = await fetch("/TNAK.bin");
     const fileArr = new Uint8Array(await response.arrayBuffer());
@@ -168,7 +174,7 @@ function encode(scriptText) {
           heldKeys.delete(key);
         }
 
-        emitHold();
+        emitHold(); // Works the same as HOLD, but removes the key from heldKeys or heldModifier
         break;
       }
 
