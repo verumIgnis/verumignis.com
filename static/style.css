@@ -93,6 +93,18 @@ body {
     top: 30px;
 }
 
+#post-content code {
+    display: block;
+    background-color: #222;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 10px 0;
+    font-family: monospace;
+}
+
 #post-content > p > img {
     border-radius: 15px;
     width: 40%
